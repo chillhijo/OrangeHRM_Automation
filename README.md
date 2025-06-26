@@ -34,7 +34,7 @@ project-root/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/chillhijo/OrangeHRM_Automation.git
    cd <project-folder>
    ```
 
