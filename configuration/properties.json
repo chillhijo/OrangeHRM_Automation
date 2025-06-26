@@ -1,0 +1,22 @@
+{
+  "url": {
+    "loginUrl": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+    "dasboardUrl": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+    "adminPageUrl": "https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers",
+    "assignLeaveUrl": "https://opensource-demo.orangehrmlive.com/web/index.php/leave/assignLeave"
+  },
+  "titles": {
+    "loginTitle": "OrangeHRM",
+    "dashboardTitle": "Dashboard",
+    "assignLeaveTitle": "Leave"
+  },
+  "user": {
+    "validUser": "Admin",
+    "validPass": "admin123",
+    "invalidUser": "invalidUser",
+    "invalidPass": "invalidPass",
+    "admin": "admin",
+    "firstlastEmployee": "FirstNameTest LastNameTest"
+  }
+
+}
