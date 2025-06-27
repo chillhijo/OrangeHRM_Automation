@@ -58,6 +58,7 @@ test.describe("Admin page tests", () => {
     await adminPage.verifyTableData(4, "Disabled");
   });
 
+  //To fasten up the test and number of functions in the example, choose to write this test in this way 
   test('Add user form - valid data', async ({ page }) => {
     await adminPage.initiateCreatingNewUser();
 
