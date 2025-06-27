@@ -1,8 +1,9 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { HomePage } from "../pages/HomePage";
 import { AdminPage } from "../pages/AdminPage";
 import data from "../configuration/properties.json";
+import { Helper } from "../utils/Helper";
 
 test.describe("Admin page tests", () => {
   let adminPage: AdminPage;
@@ -69,9 +70,9 @@ test.describe("Admin page tests", () => {
 
     // Fill Employee Name (autocomplete)
     const employeeInput = page.getByPlaceholder('Type for hints...');
-    await employeeInput.fill('Jobin Sam');
+    await employeeInput.pressSequentially('user');
 
-    const autoOption = page.locator('.oxd-autocomplete-option >> text=Jobin Mathew Sam');
+    const autoOption = page.locator('.oxd-autocomplete-option').first();
     await autoOption.waitFor({ state: 'visible' });
     await autoOption.click();
 
@@ -81,15 +82,22 @@ test.describe("Admin page tests", () => {
     await page.locator("div[role='listbox'] >> text=Enabled").click();
 
     // Fill Username
+    const username = 'testuser_' + Helper.randomString(6);
     const usernameInput = page.locator("label:has-text('Username')").locator('xpath=../../..').locator('input');
-    await usernameInput.fill('testuser123');
+    await usernameInput.fill(username);
 
     // Enter Passwords
     const passwordInputs = page.locator('input[type="password"]');
     await passwordInputs.nth(0).fill('StrongPass123!');
     await passwordInputs.nth(1).fill('StrongPass123!');
 
-    // Finish by clicking Save
+    // Finish creation by clicking Save
     await page.getByRole('button', { name: 'Save' }).click();
+
+    // Search and verify new user
+    await adminPage.verifyAdminPageUrl(data.url.adminPageUrl);
+    await adminPage.verifyAdminNavBar();
+    await adminPage.searchUserByUsername(username);
+    await adminPage.verifyTableData(1, username);
   });
 });
