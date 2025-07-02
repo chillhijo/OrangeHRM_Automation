@@ -1,19 +1,22 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
 import { HomePage } from '../pages/HomePage';
+import { LoginPage } from '../pages/LoginPage';
 import data from '../configuration/properties.json';
 
-test.describe('HomePage tests', () => {
+test.describe('HomePage tests (with storageState)', () => {
   let homePage: HomePage;
-  let login: LoginPage;
+  let loginPage: LoginPage;
+
+  // Note: Using beforeEach only for Page Object instantiation.
+  // Login is not repeated here – session reuse is achieved via storageState in playwright.config.ts.
+  // To ensure tests pass, we need to navigate to the Dashboard page because each new test
+  // creates a new browser context that reuses the login session from storageState but
+  // does not automatically open any page.
 
   test.beforeEach(async ({ page }) => {
-    login = new LoginPage(page);
     homePage = new HomePage(page);
-    await login.goToLoginPage(data.url.loginUrl);
-    await login.verifyLoginPage(data.url.loginUrl, data.titles.loginTitle);
-    await login.enterCredentials(data.user.validUser, data.user.validPass);
-    await login.clickOnLoginBtn();
+    loginPage = new LoginPage(page);
+    await page.goto(data.url.dasboardUrl);
   });
 
   test('Verify Dashboard page is loaded with correct URL and title', async () => {
@@ -38,6 +41,6 @@ test.describe('HomePage tests', () => {
 
   test('Logout from HomePage', async () => {
     await homePage.lougoutFromOrangeHRM();
-    await login.verifyLoginPage(data.url.loginUrl, data.titles.loginTitle);
-  })
-})
+    await loginPage.verifyLoginPage(data.url.loginUrl, data.titles.loginTitle);
+  });
+});

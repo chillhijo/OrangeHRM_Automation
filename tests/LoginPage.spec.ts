@@ -4,6 +4,8 @@ import data from "../configuration/properties.json";
 
 test.describe("Login tests with different combinations", () => {
 
+    //For the purposes of Login tests we need to use "login" project from config file in order to pass them using session storage state
+    
     test("Valid username and valid password", async ({ page }) => {
         const login = new LoginPage(page);
         await login.goToLoginPage(data.url.loginUrl);
