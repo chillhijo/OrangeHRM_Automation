@@ -12,6 +12,7 @@ The automation framework follows the **Page Object Model (POM)** design pattern 
 
 ```
 project-root/
+├── api/                 # Just an example of how would I structure the API project
 ├── base/                # Base class containing basic function reused over other page classes
 ├── pages/               # Page Object Model classes (Login, Home, Admin, BasePage)
 ├── tests/               # Test suites for Login, Home, and Admin pages
@@ -83,6 +84,11 @@ Every `push` or `pull request` to `main` or `master` branch will:
 - Upload HTML test report as a downloadable artifact
 
 ---
+### ⚙️ Current Framework Enhancements
+- Session Storage Reuse for UI Tests
+- Implemented a dedicated useProject in playwright.config.ts for Login tests.
+- Created an authentication test (Auth.spec.ts) which performs login and saves the session state in storage/logged-in-state.json.
+- Modified other UI test suites to reuse the saved session state, avoiding repeated logins in beforeEach hooks and significantly speeding up test execution.
 
 ## 🔧 Future Improvements
 
