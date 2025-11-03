@@ -12,9 +12,7 @@ The automation framework follows the **Page Object Model (POM)** design pattern 
 
 ```
 project-root/
-├── api/                 # Just an example of how would I structure the API project
-├── base/                # Base class containing basic function reused over other page classes
-├── pages/               # Page Object Model classes (Login, Home, Admin, BasePage)
+├── pages/               # Page Object Model classes (Login, Home, Admin)
 ├── tests/               # Test suites for Login, Home, and Admin pages
 ├── configuration/       # Test data and config (e.g., properties.json)
 ├── playwright.config.ts # Playwright configuration
