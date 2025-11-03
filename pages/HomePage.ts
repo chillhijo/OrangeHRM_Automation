@@ -1,18 +1,19 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { BasePage } from '../base/BasePage';
 
-export class HomePage extends BasePage {
-    dashboardTitle: Locator;
-    upgradeButton: Locator;
-    userDropdown: Locator;
-    timeAtWorkDivTitle: Locator;
-    myActionsDivTitle: Locator;
-    quickLaunchDivTitle: Locator;
-    assignLeaveBtn: Locator;
-    adminMenu: Locator;
+export class HomePage {
+    readonly page: Page;
+    readonly dashboardTitle: Locator;
+    readonly upgradeButton: Locator;
+    readonly userDropdown: Locator;
+    readonly timeAtWorkDivTitle: Locator;
+    readonly myActionsDivTitle: Locator;
+    readonly quickLaunchDivTitle: Locator;
+    readonly assignLeaveBtn: Locator;
+    readonly adminMenu: Locator;
+    readonly logoutBtn: Locator;
 
     constructor(page: Page) {
-        super(page);
+        this.page = page;
         this.dashboardTitle = page.locator(".oxd-topbar-header-breadcrumb");
         this.upgradeButton = page.locator(".oxd-glass-button.orangehrm-upgrade-button");
         this.userDropdown = page.locator(".oxd-userdropdown-tab");
@@ -21,14 +22,15 @@ export class HomePage extends BasePage {
         this.quickLaunchDivTitle = page.getByText("Quick Launch");
         this.assignLeaveBtn = page.getByRole("button", { name: "Assign Leave" });
         this.adminMenu = page.locator("a[href='/web/index.php/admin/viewAdminModule']");
+        this.logoutBtn = this.page.getByRole('menuitem', { name: 'Logout' })
     }
 
     async verifyDashboardPage(expectedUrl: string, title: string): Promise<void> {
         await expect(this.page).toHaveURL(expectedUrl);
         await expect(this.dashboardTitle).toBeVisible();
-        await this.hasText(this.dashboardTitle, title);
-        await this.isEnabled(this.userDropdown);
-        await this.isEnabled(this.upgradeButton);
+        await expect(this.dashboardTitle).toHaveText(title);
+        await expect(this.userDropdown).toBeEnabled();
+        await expect(this.upgradeButton).toBeEnabled();
     }
 
     async verifyLeftSideMenu() {
@@ -49,14 +51,14 @@ export class HomePage extends BasePage {
 
         for (const href of hrefs) {
             const locator = this.page.locator(`a[href="${href}"]`);
-            await this.isVisible(locator);
+            await expect(locator).toBeVisible();
         }
     }
 
     async verifySectionsOnDashboardPage(): Promise<void> {
-        await this.isVisible(this.timeAtWorkDivTitle);
-        await this.isVisible(this.myActionsDivTitle);
-        await this.isVisible(this.quickLaunchDivTitle);
+        await expect(this.timeAtWorkDivTitle).toBeVisible();
+        await expect(this.myActionsDivTitle).toBeVisible();
+        await expect(this.quickLaunchDivTitle).toBeVisible();
 
         // If we know that we aren`t going to interact anymore with these "DivTitles" we can write it like this
         await expect(this.page.getByText('Buzz Latest Posts')).toBeVisible();
@@ -66,20 +68,19 @@ export class HomePage extends BasePage {
     }
 
     async navigateToAdminPAge(expectedUrl: string): Promise<void> {
-        await this.clickOnElement(this.adminMenu);
+        await this.adminMenu.click();
         await expect(this.page).toHaveURL(expectedUrl);
     }
 
     //This method can be use for furher tests and navigation for Leave page
     async makeAssignLeave(): Promise<void> {
-        await this.isVisible(this.assignLeaveBtn);
-        await this.isEnabled(this.assignLeaveBtn);
-        await this.clickOnElement(this.assignLeaveBtn);
+        await expect(this.assignLeaveBtn).toBeVisible();
+        await expect(this.assignLeaveBtn).toBeEnabled();
+        await this.assignLeaveBtn.click();
     }
 
     async lougoutFromOrangeHRM() {
-        const logoutBtn = this.page.getByRole('menuitem', { name: 'Logout' });
-        await this.clickOnElement(this.userDropdown);
-        await this.clickOnElement(logoutBtn);
+        await this.userDropdown.click();
+        await this.logoutBtn.click();
     }
 }

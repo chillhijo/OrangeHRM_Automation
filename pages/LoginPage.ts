@@ -1,17 +1,17 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { BasePage } from '../base/BasePage';
 
-export class LoginPage extends BasePage {
-  usernameInput: Locator;
-  passwordInput: Locator;
-  loginButton: Locator;
-  forgotButton: Locator;
-  errorAlert: Locator;
-  usernameRequired: Locator;
-  passwordRequired: Locator;
+export class LoginPage {
+  readonly page: Page;
+  readonly usernameInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly forgotButton: Locator;
+  readonly errorAlert: Locator;
+  readonly usernameRequired: Locator;
+  readonly passwordRequired: Locator;
 
   constructor(page: Page) {
-    super(page);
+    this.page = page;
     this.usernameInput = this.page.getByPlaceholder('Username');
     this.passwordInput = this.page.getByPlaceholder('Password');
     this.loginButton = this.page.locator("button[type='submit']");
@@ -22,7 +22,7 @@ export class LoginPage extends BasePage {
   }
 
   async goToLoginPage(loginUrl: string): Promise<void> {
-    await this.navigateToUrl(loginUrl);
+    await this.page.goto(loginUrl);
     console.log('Login page open');
   }
 
@@ -34,13 +34,13 @@ export class LoginPage extends BasePage {
   }
 
   async enterCredentials(username: string, password: string): Promise<void> {
-    await this.enterText(this.usernameInput, username);
-    await this.enterText(this.passwordInput, password);
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
     console.log('Login credentials entered');
   }
 
   async clickOnLoginBtn(): Promise<void> {
-    await this.clickOnElement(this.loginButton);
+    await this.loginButton.click();
     console.log('Login button clicked');
   }
 

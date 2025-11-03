@@ -1,4 +1,3 @@
-// inventory.spec.ts
 import { test, expect } from '@playwright/test';
 
 test.describe('Petstore Inventory API', () => {
@@ -21,6 +20,7 @@ test.describe('Petstore Inventory API', () => {
     expect(Object.keys(inventory).length).toBeGreaterThan(0);
 
     // Define the first 3 keys 
+    // Even this part should not be checked since even the keys are changing 
     const firstThreeKeys = ['totvs', '#if(available ==', '5000'];
 
     // Verify the first 3 keys exist and their values are numbers

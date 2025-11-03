@@ -1,8 +1,7 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { BasePage } from '../base/BasePage';
 
-export class AdminPage extends BasePage {
-
+export class AdminPage{
+    readonly page: Page;
     addUserBtn: Locator;
     resetBtn: Locator;
     searchBtn: Locator;
@@ -20,9 +19,10 @@ export class AdminPage extends BasePage {
     statusSearch: Locator;
     adminOptionRole: Locator;
     autocompleteSuggestion: (name: string) => Locator;
+    roleOption: any;
 
     constructor(page: Page) {
-        super(page);
+        this.page = page;    
         this.addUserBtn = page.getByRole('button', { name: 'Add' });
         this.resetBtn = page.getByRole('button', { name: 'Reset' });
         this.searchBtn = page.getByRole('button', { name: 'Search' });
@@ -42,27 +42,27 @@ export class AdminPage extends BasePage {
         this.autocompleteSuggestion = (name: string) => page.locator(`div.oxd-autocomplete-option:has-text("${name}")`);
     }
 
-    async verifyAdminPageUrl(expectedUrl) {
+    async verifyAdminPageUrl(expectedUrl: string) {
         await expect(this.page).toHaveURL(expectedUrl);
     }
 
     async verifyAdminNavBar() {
-        await this.isVisible(this.userManagementTab);
-        await this.isVisible(this.jobTab);
-        await this.isVisible(this.organizationTab);
-        await this.isVisible(this.qualificationsTab);
-        await this.isVisible(this.nationalitiesTab);
-        await this.isVisible(this.corporateBrandingTab);
-        await this.isVisible(this.configurationTab);
-        await this.isVisible(this.helpButton);
+        await expect(this.userManagementTab).toBeVisible;
+        await expect(this.jobTab).toBeVisible;
+        await expect(this.organizationTab).toBeVisible;
+        await expect(this.qualificationsTab).toBeVisible;
+        await expect(this.nationalitiesTab).toBeVisible;
+        await expect(this.corporateBrandingTab).toBeVisible;
+        await expect(this.configurationTab).toBeVisible;
+        await expect(this.helpButton).toBeVisible;
     }
     async verifyAdminSearchSection() {
-        await this.isVisible(this.usernameInputSearch);
-        await this.isVisible(this.userRoleSearch);
-        await this.isVisible(this.employeeNameSearch);
-        await this.isVisible(this.statusSearch);
-        await this.isEnabled(this.searchBtn);
-        await this.isEnabled(this.resetBtn);
+        await expect(this.usernameInputSearch).toBeVisible;
+        await expect(this.userRoleSearch).toBeVisible;
+        await expect(this.employeeNameSearch).toBeVisible;
+        await expect(this.statusSearch).toBeVisible;
+        await expect(this.searchBtn).toBeVisible;
+        await expect(this.resetBtn).toBeVisible;
     }
 
     async searchUserByUsername(username: string) {
@@ -79,20 +79,20 @@ export class AdminPage extends BasePage {
     }
 
     async searchUserByUserRole(role: 'Admin' | 'ESS') {
-        await this.clickOnElement(this.userRoleSearch);
         const roleOption = this.page.locator(`div[role='listbox'] div:has-text("${role}")`);
-        await this.clickOnElement(roleOption);
+        await this.userRoleSearch.click();
+        await roleOption.click();
         await this.searchBtn.click();
     }
 
     async searchUserByStatus(status: 'Enabled' | 'Disabled') {
-        await this.clickOnElement(this.statusSearch);
+        await this.statusSearch.click();
         const statusOption = this.page.locator(`div[role='listbox'] div:has-text("${status}")`);
-        await this.clickOnElement(statusOption);
+        await statusOption.click();
         await this.searchBtn.click();
     }
     async initiateCreatingNewUser() {
-        await this.clickOnElement(this.addUserBtn);
+        await this.addUserBtn.click();
     }
 
     async verifyTableData(columnIndex: number, expectedValue: string) {
